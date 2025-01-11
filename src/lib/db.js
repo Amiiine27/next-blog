@@ -1,4 +1,4 @@
-import "server-only";
+import "server-only";Nova_Squa
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 if (!process.env.DB_URI) {
