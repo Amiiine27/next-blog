@@ -2,7 +2,7 @@
 import { getCollection } from "@/lib/db";
 import { RegisterFormSchema } from "@/lib/rules";
 import { createSession } from "@/lib/sessions";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 
 // tout doit etre async
@@ -32,30 +32,30 @@ export async function register(state, formData) {
         email: "Server Error",
       },
     };
-  
+
   // verifier si le mail est deja present dans la base de données
-  const existingUser = await userCollection.findOne({email})
+  const existingUser = await userCollection.findOne({ email });
   if (existingUser) {
     return {
       error: {
-        email: "This email is already linked with an account existing !"
-      }
-    }
+        email: "This email is already linked with an account existing !",
+      },
+    };
   }
 
   // Hasher le password
-  const hashedPassword = await bcrypt.hash(password, 10)
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // inserer les infos dans la table
-  const result = await userCollection.insertOne({ 
-    email, 
-    password: hashedPassword 
+  const result = await userCollection.insertOne({
+    email,
+    password: hashedPassword,
   });
 
   // creer une session
-  await createSession(result.insertedId)
-  
+  await createSession(result.insertedId.toString());
+
   // rediriger vers la page suite a la connexion
-  redirect("/dashboard")
+  redirect("/dashboard");
   console.log(result);
 }
